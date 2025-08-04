@@ -6,7 +6,6 @@ on:
       - main           # Only auto-build on push to main
     paths-ignore:      # Won't trigger workflow if only these files are edited
       - '.github/**'
-      - 'assets/**'
       - '**/*.md'
       
   workflow_dispatch:   # Allow manual build for any branch
