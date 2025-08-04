@@ -22,7 +22,7 @@ const client = new Client({
 client.once('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
 
-  client.user.setActivity('Telling everyone "NO!!', { type: 4 });   // Custom status
+  client.user.setActivity('Proudly denying your existence.', { type: 4 });   // Custom status
 });
 
 // Listen for messages
@@ -31,10 +31,8 @@ client.on('messageCreate', async (message) => {
 
   const mentionedUser = message.mentions.users.first();   // Get (first) mentioned user
   const apiUrl = process.env.API_URL || 'https://naas.debugme.dev/no';   // Fallback to naas.debugme.dev
-  const serviceLink = process.env.SERVICE_LINK || 'https://github.com/claytonfuselier/no-as-a-service';   // Fallback
-
+  
   try {
-
     // Call NaaS API
     const res = await fetch(apiUrl);
     if (!res.ok) {
@@ -55,17 +53,20 @@ client.on('messageCreate', async (message) => {
       .setTitle(data.reason)
       //.setDescription(data.reason)
       .setFooter({
-        text: 'Powered by - No as a Service (NaaS)',
+        text: 'Rejection by:  No-as-a-Service (NaaS)',
       });
 
-    // Mention user passed via `/naas` command
-    let replyContent = mentionedUser ? `${mentionedUser}` : '';
+    // Format mention line above the embed
+    let replyContent = '';
+    if (mentionedUser) {
+      replyContent = `<@${mentionedUser.id}>`;  // ensures consistent formatting
+    }
+
     const messageOptions = {
-      content: replyContent,
+      content: replyContent || undefined, // Discord requires content to be undefined if empty
       embeds: [embed],
     };
     
-
     /*
     // Build plain text message
     let replyContent = '';
