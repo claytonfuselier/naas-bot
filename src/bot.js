@@ -17,9 +17,12 @@ const client = new Client({
   ],
 });
 
+
 // Connect
 client.once('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
+
+  client.user.setActivity('Telling everyone "NO!!', { type: 4 });   // Custom status
 });
 
 // Listen for messages
@@ -31,37 +34,65 @@ client.on('messageCreate', async (message) => {
   const serviceLink = process.env.SERVICE_LINK || 'https://github.com/claytonfuselier/no-as-a-service';   // Fallback
 
   try {
+
+    // Call NaaS API
     const res = await fetch(apiUrl);
     if (!res.ok) {
       await message.reply(`received ${res.status} from backend api`);   // Reply to text-channel if API fails
       return;
     }
 
-    // Get APi response and generate embed message
+    // Parse API response
     const data = await res.json();
+
+    
+    // Generate embed message
     const embed = new EmbedBuilder()
       .setColor(0xff0000)
-      .setDescription(data.reason)
-      .setFooter({ text: 'Powered by ', iconURL: '', url: serviceLink })
-      .setTimestamp();
+      .setAuthor({
+        name: 'No as a Service (NaaS)'
+      })
+      .setTitle(data.reason)
+      //.setDescription(data.reason)
+      .setFooter({
+        text: 'Powered by - naas.debugme.dev',
+      });
 
     // Mention user passed via `/naas` command
+    let replyContent = mentionedUser ? `${mentionedUser}` : '';
+    const messageOptions = {
+      content: replyContent,
+      embeds: [embed],
+    };
+    
+
+    /*
+    // Build plain text message
     let replyContent = '';
+
     if (mentionedUser) {
-      replyContent = `${mentionedUser}`;
+      replyContent += `${mentionedUser}\n`;
     }
+
+    replyContent += data.reason;
+
+    // Prepare message options as plain text
+    const messageOptions = {
+      content: replyContent,
+    };
+    */
 
     // Reply to same message command replied to
     if (message.reference) {
       const referencedMessage = await message.channel.messages.fetch(message.reference.messageId);
-      referencedMessage.reply({ content: replyContent, embeds: [embed] });
+      await referencedMessage.reply(messageOptions);
     } else {
-      message.reply({ content: replyContent, embeds: [embed] });
+      await message.channel.send(messageOptions);
     }
 
   } catch (error) {
     console.error('Error:', error);
-    message.reply(`received 500 from backend api`);
+    await message.channel.send('received 500 from backend api');
   }
 });
 
