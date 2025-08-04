@@ -49,13 +49,13 @@ client.on('messageCreate', async (message) => {
     // Generate embed message
     const embed = new EmbedBuilder()
       .setColor(0xff0000)
-      .setAuthor({
-        name: 'No as a Service (NaaS)'
-      })
+      //.setAuthor({
+        //name: 'No as a Service (NaaS)'
+      //})
       .setTitle(data.reason)
       //.setDescription(data.reason)
       .setFooter({
-        text: 'Powered by - naas.debugme.dev',
+        text: 'Powered by - No as a Service (NaaS)',
       });
 
     // Mention user passed via `/naas` command
