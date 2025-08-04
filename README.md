@@ -76,4 +76,9 @@ Written while ignoring real responsibilities, by [claytonfuselier](https://githu
 
 <br>
 
+## 📄 License
+This project is open source and available under the [MIT License](LICENSE).
+
+<br>
+
 © NaaS-Bot. Just kidding, we are not a real company. Don’t sue us.
