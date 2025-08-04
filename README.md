@@ -1,26 +1,14 @@
-# NaaS-Bot
+# NaaS-Bot (Discord)
 
-A Discord bot that delivers premium-grade rejection-as-a-service via the [No-as-a-Service](https://github.com/claytonfuselier/no-as-a-service) API.
+A Discord bot that delivers rejection-as-a-service via the [No-as-a-Service](https://github.com/claytonfuselier/no-as-a-service) API.
 
-NaaS-Bot listens for the command `/naas`, and then:
+NaaS-Bot listens for the command `/naas` and then:
 
 * Gets a rejection reason from the [No-as-a-Service](https://github.com/claytonfuselier/no-as-a-service) API
 * Returns the `reason` as a styled Discord embed
 * Tags mentioned users, or replies to referenced messages (if applicable)
 
 It's clean, stateless, containerized, and built for quick denials.
-
-<br>
-
-## 🔧 Configuration
-
-Use environment variables to keep things portable and secure:
-
-```env
-DISCORD_TOKEN=your-discord-bot-token
-API_URL=https://your.no-as-a-service-instance/api
-SERVICE_LINK=https://your.no-as-a-service-instance
-```
 
 <br>
 
@@ -35,53 +23,57 @@ SERVICE_LINK=https://your.no-as-a-service-instance
 
 <br>
 
-## 🚀 Deploy It Yourself
+## 🚀 Deploy
 
 ### 🐳📥 Docker Pull
 Pull and run the container from GitHub Container Registry:
 ```
 docker pull ghcr.io/claytonfuselier/naas-bot:latest
-docker run ghcr.io/claytonfuselier/naas-bot:latest
+docker run -e DISCORD_TOKEN=your-discord-bot-token ghcr.io/claytonfuselier/naas-bot:latest
 ```
 
 ### 🐳🧩 Docker Compose
 Use this sample `docker-compose.yml` to pull a pre-built image from ghcr.io:
 ```
 services:
-  no-as-a-service:
-    image: ghcr.io/claytonfuselier/no-as-a-service:latest
-    container_name: no-as-a-service
-    ports:
-      - "8080:3000"
+  naas-bot:
+    image: ghcr.io/claytonfuselier/naas-bot:latest
+    container_name: naas-bot
+    environment:
+      TZ: "UTC"
+      DISCORD_TOKEN: "your-discord-bot-token"
+      # Optional - Environment Variables
+      #API_URL: "https://naas.debugme.dev/no"
+      #SERVICE_LINK: "https://github.com/claytonfuselier/no-as-a-service/"
     restart: unless-stopped
 ```
-Then access the API at: `http://localhost:8080/no`
 
 ### 📦🖥️ Run Locally as NPM Package
 Run the service without Docker, using NPM
 ```
-git clone https://github.com/claytonfuselier/no-as-a-service.git
-cd no-as-a-service/app
+git clone https://github.com/claytonfuselier/naas-bot.git
+cd naas-bot/src
 npm install
-npm start
-```
-By default it listens on port 3000, or override with `PORT=8080 npm start`.
-
-<br>
-
-## 🛠 Development
-
-```bash
-npm install
-node src/bot.js
+DISCORD_TOKEN=your-discord-bot-token npm start
 ```
 
 <br>
 
-## ❓ Why
+## 🧰 Customize Environment
+You can configure NaaS-Bot by passing environment variables to the container.
 
-Because automated rejection should be consistent, stateless, and a little bit stylish.
+| Variable        | Default Value                                         | Required | Description                                                   |
+|-----------------|-------------------------------------------------------|----------|---------------------------------------------------------------|
+| `TZ`            | `UTC`                                                 | Yes      | Timezone for all time-based operations and logs.              |              |
+| `DISCORD_TOKEN` | `your-discord-bot-token`                              | Yes      | The bot token used to authenticate with the Discord API.      |
+| `API_URL`       | `https://naas.debugme.dev/no`                         | No       | The full URL to your No-as-a-Service API endpoint.            |
+| `SERVICE_LINK`  | `https://github.com/claytonfuselier/no-as-a-service/` | No       | Link displayed in embed footer; branding for No-as-a-Service. |
 
 <br>
 
-© naas-bot. We are not a real company. Don’t invoice us.
+## 👤 Authors
+Written while ignoring real responsibilities, by [claytonfuselier](https://github.com/claytonfuselier)
+
+<br>
+
+© NaaS-Bot. Just kidding, we are not a real company. Don’t sue us.
