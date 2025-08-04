@@ -33,7 +33,7 @@ jobs:
       - name: Set image tag based on branch   # /refs/heads/main goes to 'latest', all others go to 'dev'
         id: tag
         run: |
-          VERSION=$(jq -r .version app/package.json)
+          VERSION=$(jq -r .version src/package.json)
           BRANCH_NAME="${GITHUB_REF##*/}"
       
           if [[ "$BRANCH_NAME" == "main" ]]; then
@@ -49,7 +49,7 @@ jobs:
           docker build \
             -t ghcr.io/${{ github.repository }}:${{ steps.tag.outputs.tag }} \
             -t ghcr.io/${{ github.repository }}:${{ steps.tag.outputs.version_tag }} \
-            ./app
+            ./src
 
       - name: Push Docker image
         run: |
