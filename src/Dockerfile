@@ -13,3 +13,4 @@ COPY . .
 
 # Run the app
 CMD [ "node", "bot.js" ]
+
