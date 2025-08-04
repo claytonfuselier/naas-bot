@@ -29,7 +29,7 @@ client.once('ready', () => {
 client.on('interactionCreate', async interaction => {
   // 🔹 Handle slash command: /no
   if (interaction.commandName === 'no') {
-    const mentionedUser = interaction.options.getUser('user');  // must match .setName('user')
+    const mentionedUser = interaction.options.getUser('user');
     const apiUrl = process.env.API_URL || 'https://naas.debugme.dev/no';
 
     try {
@@ -39,7 +39,7 @@ client.on('interactionCreate', async interaction => {
       const embed = new EmbedBuilder()
         .setColor(0xff0000)
         .setAuthor({
-          name: interaction.user.tag,
+          name: interaction.member?.displayName || interaction.user.username,
           iconURL: interaction.user.displayAvatarURL({ dynamic: true })
         })
         .setDescription(data.reason)
@@ -81,15 +81,14 @@ client.on('interactionCreate', async interaction => {
         const embed = new EmbedBuilder()
           .setColor(0xff0000)
           .setAuthor({
-            name: interaction.user.tag,
+            name: interaction.member?.displayName || interaction.user.username,
             iconURL: interaction.user.displayAvatarURL({ dynamic: true })
           })
           .setDescription(data.reason)
           .setFooter({ text: 'Powered by:  No-as-a-Service (NaaS)' });
 
         await targetMessage.reply({
-          //content: `<@${targetUser.id}>`,
-          content: '',
+          content: `<@${targetUser.id}>`,
           embeds: [embed],
           allowedMentions: { users: [targetUser.id] }
         });
