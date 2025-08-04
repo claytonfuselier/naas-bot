@@ -1,0 +1,18 @@
+# Ignore dependencies
+**/node_modules/
+
+# Ignore environment and secrets
+**/.env
+
+# Ignore logs
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+
+# Ignore editor/OS clutter
+**/.vscode/
+**/.DS_Store
+**/Thumbs.db
+
+# Ignore version control metadata
+**/.git
