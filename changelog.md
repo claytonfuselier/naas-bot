@@ -1,4 +1,12 @@
 # 📝 Changelog
 
+v1.0.1
+- Changed the command from `/naas` to `/no`
+- Converted the command to a registered command with optional @user targeting
+- Added context menu command
+  - Registered commands do not allow replying to message. Adding this context menu command is he workaround, so that particular messages can still be targeted and replied to with a rejection
+- Add "Author" field to the embed to display username and avatar of who triggered the command(s)
+- Fixed: Input control stuck in the bot and not returning to normal.
+
 v1.0.0
 - Initial creation of project
