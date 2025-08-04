@@ -32,7 +32,8 @@ const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
   try {
     console.log('Registering commands...');
     await rest.put(
-      Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
+      //Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),   // Only register command for local server
+      Routes.applicationCommands(process.env.CLIENT_ID),   // Globally register command
       { body: commands }
     );
     console.log('✅ Commands registered successfully.');
