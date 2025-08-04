@@ -27,6 +27,14 @@ client.once('ready', () => {
 
 
 client.on('interactionCreate', async interaction => {
+  // 🔹 Handle @mentions
+  if (message.author.bot || !message.mentions.has(client.user)) return; // Ignore bot messages or non-mentions
+  const response = `@${message.author.username}, why are you tagging me? I don't want to talk to you! Use the \`/no\` command like everyone else.`;
+  await message.reply({
+    content: response,
+    allowedMentions: { users: [message.author.id] }
+  });
+
   // 🔹 Handle slash command: /no
   if (interaction.commandName === 'no') {
     const mentionedUser = interaction.options.getUser('user');
