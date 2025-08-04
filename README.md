@@ -65,12 +65,12 @@ DISCORD_TOKEN=your-discord-bot-token npm start
 ## 🧰 Customize Environment
 You can configure NaaS-Bot by passing environment variables to the container.
 
-| Variable        | Default Value                                         | Required | Description                                                   |
-|-----------------|-------------------------------------------------------|----------|---------------------------------------------------------------|
-| `TZ`            | `UTC`                                                 | Yes      | Timezone for all time-based operations and logs.              |              |
-| `DISCORD_TOKEN` | `your-discord-bot-token`                              | Yes      | The bot token used to authenticate with the Discord API.      |
-| `API_URL`       | `https://naas.debugme.dev/no`                         | No       | The full URL to your No-as-a-Service API endpoint.            |
-| `SERVICE_LINK`  | `https://github.com/claytonfuselier/no-as-a-service/` | No       | Link displayed in embed footer; branding for No-as-a-Service. |
+| Variable      | Default Value                                         | Required | Description                                                   |
+|---------------|-------------------------------------------------------|----------|---------------------------------------------------------------|
+| DISCORD_TOKEN |                                                       | Yes      | The bot token used to authenticate with the Discord API.      |
+| API_URL       | `https://naas.debugme.dev/no`                         | No       | The full URL to your No-as-a-Service API endpoint.            |
+| SERVICE_LINK  | `https://github.com/claytonfuselier/no-as-a-service/` | No       | Link displayed in embed footer; branding for No-as-a-Service. |
+| TZ            | `UTC`                                                 | No       | Timezone for all time-based operations and logs.              |
 
 <br>
 

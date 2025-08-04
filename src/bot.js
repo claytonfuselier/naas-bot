@@ -22,78 +22,87 @@ const client = new Client({
 client.once('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
 
-  client.user.setActivity('Telling everyone "NO!!', { type: 4 });   // Custom status
+  client.user.setActivity('Proudly denying your existence.', { type: 4 });   // Custom status
 });
 
-// Listen for messages
-client.on('messageCreate', async (message) => {
-  if (message.author.bot || !message.content.startsWith('/naas')) return;   // Ignore bot messages and messages starting without "/naas" 
 
-  const mentionedUser = message.mentions.users.first();   // Get (first) mentioned user
-  const apiUrl = process.env.API_URL || 'https://naas.debugme.dev/no';   // Fallback to naas.debugme.dev
-  const serviceLink = process.env.SERVICE_LINK || 'https://github.com/claytonfuselier/no-as-a-service';   // Fallback
+client.on('interactionCreate', async interaction => {
+  // 🔹 Handle slash command: /no
+  if (interaction.commandName === 'no') {
+    const mentionedUser = interaction.options.getUser('user');  // must match .setName('user')
+    const apiUrl = process.env.API_URL || 'https://naas.debugme.dev/no';
 
-  try {
+    try {
+      const res = await fetch(apiUrl);
+      const data = await res.ok ? await res.json() : { reason: 'No response from backend.' };
 
-    // Call NaaS API
-    const res = await fetch(apiUrl);
-    if (!res.ok) {
-      await message.reply(`received ${res.status} from backend api`);   // Reply to text-channel if API fails
-      return;
-    }
+      const embed = new EmbedBuilder()
+        .setColor(0xff0000)
+        .setAuthor({
+          name: interaction.user.tag,
+          iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+        })
+        .setDescription(data.reason)
+        .setFooter({ text: 'Powered by:  No-as-a-Service (NaaS)' });
 
-    // Parse API response
-    const data = await res.json();
-
-    
-    // Generate embed message
-    const embed = new EmbedBuilder()
-      .setColor(0xff0000)
-      .setAuthor({
-        name: 'No as a Service (NaaS)'
-      })
-      .setTitle(data.reason)
-      //.setDescription(data.reason)
-      .setFooter({
-        text: 'Powered by - naas.debugme.dev',
+      await interaction.reply({
+        content: mentionedUser ? `<@${mentionedUser.id}>` : undefined,
+        embeds: [embed],
+        allowedMentions: mentionedUser ? { users: [mentionedUser.id] } : undefined
       });
 
-    // Mention user passed via `/naas` command
-    let replyContent = mentionedUser ? `${mentionedUser}` : '';
-    const messageOptions = {
-      content: replyContent,
-      embeds: [embed],
-    };
-    
-
-    /*
-    // Build plain text message
-    let replyContent = '';
-
-    if (mentionedUser) {
-      replyContent += `${mentionedUser}\n`;
+    } catch (err) {
+      console.error('Slash command error:', err);
+      if (!interaction.replied) {
+        await interaction.reply({
+          content: 'received 500 from backend api',
+          ephemeral: true
+        });
+      }
     }
+  }
 
-    replyContent += data.reason;
+  // 🔹 Handle context menu: "Reject via NaaS"
+  else if (interaction.isMessageContextMenuCommand()) {
+    if (interaction.commandName === 'Reject via NaaS') {
+      const targetMessage = interaction.targetMessage;
+      const targetUser = targetMessage.author;
+      const apiUrl = process.env.API_URL || 'https://naas.debugme.dev/no';
 
-    // Prepare message options as plain text
-    const messageOptions = {
-      content: replyContent,
-    };
-    */
+      try {
+        const res = await fetch(apiUrl);
+        if (!res.ok) {
+          await interaction.reply({ content: `received ${res.status} from backend api`, ephemeral: true });
+          return;
+        }
 
-    // Reply to same message command replied to
-    if (message.reference) {
-      const referencedMessage = await message.channel.messages.fetch(message.reference.messageId);
-      await referencedMessage.reply(messageOptions);
-    } else {
-      await message.channel.send(messageOptions);
+        const data = await res.json();
+
+        const embed = new EmbedBuilder()
+          .setColor(0xff0000)
+          .setAuthor({
+            name: interaction.user.tag,
+            iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+          })
+          .setDescription(data.reason)
+          .setFooter({ text: 'Powered by:  No-as-a-Service (NaaS)' });
+
+        await targetMessage.reply({
+          //content: `<@${targetUser.id}>`,
+          content: '',
+          embeds: [embed],
+          allowedMentions: { users: [targetUser.id] }
+        });
+
+        await interaction.reply({ content: '✅ Rejection delivered.', ephemeral: true });
+
+      } catch (error) {
+        console.error('Context menu error:', error);
+        await interaction.reply({ content: 'received 500 from backend api', ephemeral: true });
+      }
     }
-
-  } catch (error) {
-    console.error('Error:', error);
-    await message.channel.send('received 500 from backend api');
   }
 });
+
 
 client.login(process.env.DISCORD_TOKEN);
