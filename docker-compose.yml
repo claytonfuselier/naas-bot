@@ -3,8 +3,9 @@ services:
     image: ghcr.io/claytonfuselier/no-as-a-service:latest
     container_name: naas-bot
     environment:
-      TZ: "UTC"
       DISCORD_TOKEN: "your-discord-bot-token"
-      API_URL: "https://naas.debugme.dev/no"
-      SERVICE_LINK: "https://github.com/claytonfuselier/no-as-a-service/"
+      # Optional - Environment Variables
+      TZ: "UTC"
+      #API_URL: "https://naas.debugme.dev/no"
+      #SERVICE_LINK: "https://github.com/claytonfuselier/no-as-a-service/"
     restart: unless-stopped
