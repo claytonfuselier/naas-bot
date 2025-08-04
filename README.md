@@ -1,5 +1,5 @@
 # NaaS-Bot (Discord)
-[![Version](https://img.shields.io/github/package-json/v/claytonfuselier/naas-bot?filename=src%2Fpackage.json)](#)
+[![Version](https://img.shields.io/github/package-json/v/claytonfuselier/naas-bot?filename=%2Fsrc%2Fpackage.json)](#)
 [![License](https://img.shields.io/github/license/claytonfuselier/naas-bot)](#)  
 [![NaaS Response](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fnaas.debugme.dev%2Fno&query=%24.reason&label=NaaS%20Response&color=orange)](https://naas.debugme.dev)
 
