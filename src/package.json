@@ -2,13 +2,13 @@
   "name": "naas-bot",
   "version": "1.0.0",
   "description": "A stateless Discord bot that delivers rejections via No‑as‑a‑Service.",
-  "main": "src/bot.js",
+  "main": "bot.js",
   "type": "module",
   "engines": {
     "node": ">=22.12.0"
   },
   "scripts": {
-    "start": "node src/bot.js"
+    "start": "node bot.js"
   },
   "dependencies": {
     "discord.js": "^14.21.0",
