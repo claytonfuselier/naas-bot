@@ -1,6 +1,6 @@
 # 📝 Changelog
 
-v1.0.1
+v1.1.0
 - Changed the command from `/naas` to `/no`
 - Converted the command to a registered command with optional @user targeting
 - Added context menu command
