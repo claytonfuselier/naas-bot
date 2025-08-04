@@ -72,3 +72,4 @@ jobs:
                 curl -X DELETE -H "Authorization: Bearer $GH_TOKEN" \
                   https://api.github.com/users/$USERNAME/packages/container/$IMAGE_NAME/versions/$id
               done
+
