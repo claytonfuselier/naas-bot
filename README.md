@@ -2,13 +2,9 @@
 
 A Discord bot that delivers premium-grade rejection-as-a-service via the [No-as-a-Service](https://github.com/claytonfuselier/no-as-a-service) API.
 
-<br>
-
-## 🚀 Overview
-
 NaaS-Bot listens for the command `/naas`, and then:
 
-* Gets a rejection reason from the No-as-a-Service API
+* Gets a rejection reason from the [No-as-a-Service](https://github.com/claytonfuselier/no-as-a-service) API
 * Returns the `reason` as a styled Discord embed
 * Tags mentioned users, or replies to referenced messages (if applicable)
 
@@ -39,12 +35,37 @@ SERVICE_LINK=https://your.no-as-a-service-instance
 
 <br>
 
-## 🐳 Docker Support
+## 🚀 Deploy It Yourself
 
-```bash
-docker build -t naas-bot .
-docker run --rm --env-file .env naas-bot
+### 🐳📥 Docker Pull
+Pull and run the container from GitHub Container Registry:
 ```
+docker pull ghcr.io/claytonfuselier/naas-bot:latest
+docker run ghcr.io/claytonfuselier/naas-bot:latest
+```
+
+### 🐳🧩 Docker Compose
+Use this sample `docker-compose.yml` to pull a pre-built image from ghcr.io:
+```
+services:
+  no-as-a-service:
+    image: ghcr.io/claytonfuselier/no-as-a-service:latest
+    container_name: no-as-a-service
+    ports:
+      - "8080:3000"
+    restart: unless-stopped
+```
+Then access the API at: `http://localhost:8080/no`
+
+### 📦🖥️ Run Locally as NPM Package
+Run the service without Docker, using NPM
+```
+git clone https://github.com/claytonfuselier/no-as-a-service.git
+cd no-as-a-service/app
+npm install
+npm start
+```
+By default it listens on port 3000, or override with `PORT=8080 npm start`.
 
 <br>
 
