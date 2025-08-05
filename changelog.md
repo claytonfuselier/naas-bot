@@ -1,5 +1,9 @@
 # 📝 Changelog
 
+## v1.2.0
+- Added auto-replies from bot when someone @mentions it
+  - Replies are randomly selected from `mention-replies.json`
+
 ## v1.1.2
 - Embed reply now shows the displayname of the interactive user, instead of username.
 
