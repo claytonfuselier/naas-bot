@@ -1,6 +1,7 @@
 import { Client, GatewayIntentBits, Partials, EmbedBuilder } from 'discord.js';
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
+import fs from 'fs/promises';
 
 dotenv.config();
 
@@ -17,7 +18,6 @@ const client = new Client({
   ],
 });
 
-
 // Connect
 client.once('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
@@ -26,15 +26,33 @@ client.once('ready', () => {
 });
 
 
-client.on('interactionCreate', async interaction => {
-  // 🔹 Handle @mentions
-  if (message.author.bot || !message.mentions.has(client.user)) return; // Ignore bot messages or non-mentions
-  const response = `@${message.author.username}, why are you tagging me? I don't want to talk to you! Use the \`/no\` command like everyone else.`;
-  await message.reply({
-    content: response,
-    allowedMentions: { users: [message.author.id] }
-  });
+// 🔹 Handle @mentions
+client.on('messageCreate', async (message) => {
+  if (message.author.bot || !message.mentions.has(client.user)) return;   // Ignore bots and non-users
+  
+  try {
+    const replies = JSON.parse(await fs.readFile('./mention-replies.json', 'utf-8'));   // Read @mention replies from file
 
+    // Choose a random reply and replace @user placeholder
+    const randomReply = replies[Math.floor(Math.random() * replies.length)];
+    const response = randomReply.replace('@user', `<@${message.author.id}>`);
+
+    await message.reply({
+      content: response,
+      allowedMentions: { users: [message.author.id] }
+    });
+  } catch (err) {
+    console.error('Error reading mention replies:', err);
+    await message.reply({
+      content: `<@${message.author.id}>, I'm too annoyed to respond right now. Try /no later. (API failure)`,
+      allowedMentions: { users: [message.author.id] }
+    });
+  }
+});
+
+
+// Command interactions
+client.on('interactionCreate', async interaction => {
   // 🔹 Handle slash command: /no
   if (interaction.commandName === 'no') {
     const mentionedUser = interaction.options.getUser('user');
@@ -69,6 +87,7 @@ client.on('interactionCreate', async interaction => {
       }
     }
   }
+
 
   // 🔹 Handle context menu: "Reject via NaaS"
   else if (interaction.isMessageContextMenuCommand()) {
