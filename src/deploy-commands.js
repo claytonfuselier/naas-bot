@@ -21,7 +21,18 @@ const commands = [
     .toJSON(),
 
   new ContextMenuCommandBuilder()
-    .setName('Reject via NaaS')
+    .setName('No')
+    .setType(ApplicationCommandType.Message)
+    .toJSON(),
+
+  new SlashCommandBuilder()
+    .setName('nohello')
+    .setDescription('No hello: reply with guidance')
+    .addUserOption(opt => opt.setName('user').setDescription('User to nudge').setRequired(false))
+    .toJSON(),
+
+  new ContextMenuCommandBuilder()
+    .setName('No Hello')               // must match interaction.commandName
     .setType(ApplicationCommandType.Message)
     .toJSON()
 ];
@@ -32,10 +43,18 @@ const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
   try {
     console.log('Registering commands...');
     await rest.put(
-      //Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),   // Only register command for local server
+      // Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),   // Only register command for local server
       Routes.applicationCommands(process.env.CLIENT_ID),   // Globally register command
       { body: commands }
     );
+
+    // 🔹 Fetch and print what Discord has on record
+    const existing = await rest.get(Routes.applicationCommands(process.env.CLIENT_ID));
+    console.log('Currently registered commands:');
+    existing.forEach(c => {
+      console.log(`- ${c.name} (type ${c.type})`);
+    });
+
     console.log('✅ Commands registered successfully.');
   } catch (error) {
     console.error('Error registering commands:', error);

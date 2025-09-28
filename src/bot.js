@@ -72,7 +72,7 @@ client.on('interactionCreate', async interaction => {
   // 🔹 Handle slash command: /no
   if (interaction.isChatInputCommand() && interaction.commandName === 'no') {
     const mentionedUser = interaction.options.getUser('user');
-    const apiUrl = process.env.API_URL || 'https://naas.debugme.dev/no';
+    const apiUrl = process.env.API_ENDPOINT_NO || 'https://naas.debugme.dev/no';
 
     try {
       const res = await fetch(apiUrl);
@@ -105,11 +105,11 @@ client.on('interactionCreate', async interaction => {
   }
 
 
-  // 🔹 Handle context menu: "Reject via NaaS"
-  else if (interaction.isMessageContextMenuCommand() && interaction.commandName === 'Reject via NaaS') {
+  // 🔹 Handle context menu: "No"
+  else if (interaction.isMessageContextMenuCommand() && interaction.commandName === 'No') {
     const targetMessage = interaction.targetMessage;
     const targetUser = targetMessage.author;
-    const apiUrl = process.env.API_URL || 'https://naas.debugme.dev/no';
+    const apiUrl = process.env.API_ENDPOINT_NO || 'https://naas.debugme.dev/no';
 
     try {
       const res = await fetch(apiUrl);
@@ -136,6 +136,81 @@ client.on('interactionCreate', async interaction => {
       });
 
       await interaction.reply({ content: '✅ Rejection delivered.', ephemeral: true });
+
+    } catch (error) {
+      console.error('Context menu error:', error);
+      await interaction.reply({ content: 'received 500 from backend api', ephemeral: true });
+    }
+  }
+
+
+  // 🔹 Handle slash command: /nohello
+  if (interaction.isChatInputCommand() && interaction.commandName === 'nohello') {
+    const mentionedUser = interaction.options.getUser('user');
+    const apiUrl = process.env.API_ENDPOINT_NOHELLO || 'https://naas.debugme.dev/nohello';
+
+    try {
+      const res = await fetch(apiUrl);
+      const data = await res.ok ? await res.json() : { greeting: 'No response from backend.' };
+
+      const embed = new EmbedBuilder()
+        .setColor(0xff0000)
+        .setAuthor({
+          name: interaction.member?.displayName || interaction.user.username,
+          iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+        })
+        .setDescription(data.greeting)
+        .setFooter({ text: 'Powered by:  No-as-a-Service (NaaS)' });
+
+      await interaction.reply({
+        content: mentionedUser ? `<@${mentionedUser.id}>` : undefined,
+        embeds: [embed],
+        allowedMentions: mentionedUser ? { users: [mentionedUser.id] } : undefined
+      });
+
+    } catch (err) {
+      console.error('Slash command error:', err);
+      if (!interaction.replied) {
+        await interaction.reply({
+          content: 'received 500 from backend api',
+          ephemeral: true
+        });
+      }
+    }
+  }
+
+
+  // 🔹 Handle context menu: "No Hello"
+  else if (interaction.isMessageContextMenuCommand() && interaction.commandName === 'No Hello') {
+    const targetMessage = interaction.targetMessage;
+    const targetUser = targetMessage.author;
+    const apiUrl = process.env.API_ENDPOINT_NOHELLO || 'https://naas.debugme.dev/nohello';
+
+    try {
+      const res = await fetch(apiUrl);
+      if (!res.ok) {
+        await interaction.reply({ content: `received ${res.status} from backend api`, ephemeral: true });
+        return;
+      }
+
+      const data = await res.json();
+
+      const embed = new EmbedBuilder()
+        .setColor(0xff0000)
+        .setAuthor({
+          name: interaction.member?.displayName || interaction.user.username,
+          iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+        })
+        .setDescription(data.greeting)
+        .setFooter({ text: 'Powered by:  No-as-a-Service (NaaS)' });
+
+      await targetMessage.reply({
+        content: `<@${targetUser.id}>`,
+        embeds: [embed],
+        allowedMentions: { users: [targetUser.id] }
+      });
+
+      await interaction.reply({ content: '✅ Greeting delivered.', ephemeral: true });
 
     } catch (error) {
       console.error('Context menu error:', error);
