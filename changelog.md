@@ -1,5 +1,12 @@
 # 📝 Changelog
 
+## v1.2.1
+- Bot will now ignore replies to its own messages
+- Bot will now ignore any `@role` type mentions
+- Misc
+  - Additional code safeguarding for clean(er) failures
+  - Clearer error messaging
+
 ## v1.2.0
 - Added auto-replies from bot when someone @mentions it
   - Replies are randomly selected from `mention-replies.json`
