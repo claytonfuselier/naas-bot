@@ -6,6 +6,6 @@ services:
       DISCORD_TOKEN: "your-discord-bot-token"
       # Optional - Environment Variables
       TZ: "UTC"
-      #API_URL: "https://naas.debugme.dev/no"
-      #SERVICE_LINK: "https://github.com/claytonfuselier/no-as-a-service/"
+      #API_ENDPOINT_NO: "https://naas.debugme.dev/no"
+      #API_ENDPOINT_NOHELLO: "https://naas.debugme.dev/nohello"
     restart: unless-stopped

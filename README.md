@@ -5,24 +5,28 @@
 
 A Discord bot that delivers rejection-as-a-service via the [No-as-a-Service](https://github.com/claytonfuselier/no-as-a-service) API.
 
-NaaS-Bot listens for the command `/naas` and then:
-
-* Gets a rejection reason from the [No-as-a-Service](https://github.com/claytonfuselier/no-as-a-service) API
-* Returns the `reason` as a styled Discord embed
-* Tags mentioned users, or replies to referenced messages (if applicable)
+NaaS-Bot listens for the command `/no` or `/nohello` and then:  
+* Gets a rejection "reason" or "greeting" from the [No-as-a-Service](https://github.com/claytonfuselier/no-as-a-service) API  
+* Returns the `reason` or `greeting` as a styled Discord embed  
+* Tags mentioned users, or replies to referenced messages (if applicable)  
 
 It's clean, stateless, containerized, and built for quick denials.
+
+*Note: The bot ignores any role mentions or replies to its messages.*
 
 <br>
 
 ## 🛠 Usage Examples
 
-| Scenario           | Behavior                                               |
-| ------------------ | ------------------------------------------------------ |
-| `/naas`            | Replies with a rejection message                       |
-| `/naas @user`      | Tags `@user` with the rejection message                |
-| `/naas` (as reply) | Replies directly to the referenced message             |
-| API error          | Replies with `received <status code> from backend api` |
+| Scenario              | Behavior                                               |
+| --------------------- | ------------------------------------------------------ |
+| `/no`                 | Replies with a rejection message                       |
+| `/no @user`           | Tags `@user` with the rejection message                |
+| `/no` (as reply)      | Replies directly to the referenced message             |
+| `/nohello`            | Replies with a greeting response                       |
+| `/nohello @user`      | Tags `@user` with the greeting response                |
+| `/nohello` (as reply) | Replies directly to the referenced message             |
+| API error             | Replies with `received <status code> from backend api` |
 
 <br>
 
@@ -43,11 +47,11 @@ services:
     image: ghcr.io/claytonfuselier/naas-bot:latest
     container_name: naas-bot
     environment:
-      TZ: "UTC"
       DISCORD_TOKEN: "your-discord-bot-token"
       # Optional - Environment Variables
-      #API_URL: "https://naas.debugme.dev/no"
-      #SERVICE_LINK: "https://github.com/claytonfuselier/no-as-a-service/"
+      TZ: "UTC"
+      #API_ENDPOINT_NO: "https://naas.debugme.dev/no"
+      #API_ENDPOINT_NOHELLO: "https://naas.debugme.dev/nohello"
     restart: unless-stopped
 ```
 
@@ -65,12 +69,12 @@ DISCORD_TOKEN=your-discord-bot-token npm start
 ## 🧰 Customize Environment
 You can configure NaaS-Bot by passing environment variables to the container.
 
-| Variable      | Default Value                                         | Required | Description                                                   |
-|---------------|-------------------------------------------------------|----------|---------------------------------------------------------------|
-| DISCORD_TOKEN |                                                       | Yes      | The bot token used to authenticate with the Discord API.      |
-| API_URL       | `https://naas.debugme.dev/no`                         | No       | The full URL to your No-as-a-Service API endpoint.            |
-| SERVICE_LINK  | `https://github.com/claytonfuselier/no-as-a-service/` | No       | Link displayed in embed footer; branding for No-as-a-Service. |
-| TZ            | `UTC`                                                 | No       | Timezone for all time-based operations and logs.              |
+| Variable             | Default Value                                         | Required | Description                                                     |
+|----------------------|-------------------------------------------------------|----------|-----------------------------------------------------------------|
+| DISCORD_TOKEN        |                                                       | Yes      | The bot token used to authenticate with the Discord API.        |
+| API_ENDPOINT_NO      | `https://naas.debugme.dev/no`                         | No       | The full URL to your No-as-a-Service API endpoint for `/no`.    |
+| API_ENDPOINT_NOHELLO | `https://naas.debugme.dev/nohello`                    | No       | The full URL to your No-as-a-Service API endpoint for /nohello. |
+| TZ                   | `UTC`                                                 | No       | Timezone for all time-based operations and logs.                |
 
 <br>
 

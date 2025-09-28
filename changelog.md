@@ -1,5 +1,12 @@
 # 📝 Changelog
 
+## v1.3.0
+- Added `/nohello` slash command and "No Hello" context menu command.
+
+## v1.2.2
+- Renamed "Reject via NaaS" context menu command to "No"
+- Misc code cleanup
+
 ## v1.2.1
 - Bot will now ignore replies to its own messages
 - Bot will now ignore any `@role` type mentions
